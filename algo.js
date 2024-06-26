@@ -38,7 +38,8 @@ startButton.addEventListener("click", () =>{
 
 wallDone.addEventListener("click", () =>{
     mode = 2
-    ShowButton(startDone)    
+    ShowButton(startDone)
+    GenerateGraph(walls)
 })
 startDone.addEventListener("click", () =>{
     mode = 3
@@ -46,7 +47,8 @@ startDone.addEventListener("click", () =>{
 })
 
 endDone.addEventListener("click", () =>{
-    //something else    
+    Init()
+    window.requestAnimationFrame(DrawFrames)   
 })
 
 // let graph = Array(yCellCount)
@@ -55,45 +57,34 @@ endDone.addEventListener("click", () =>{
 //     graph[i] = Array(xCellCount)
 // }
 
-let graph = [
-    [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
-    [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
-    [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
-    [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
-    [false, true, true, true, true, true, true, true, true ,true ,false, false, false, true, true, true, true, true, true, true ,true ,false],
-    [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
-    [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
-    [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
-    [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
-    [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
-    [false, true, true, true, true, true, true, true, true ,true ,true, true, true, true, true, true, true, true, true, true ,true ,false],
-    [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
-]
 
-function Grid(){
-    for(let i = 1;i<xCellCount;i++){
-        c.beginPath();
-        c.moveTo(i*cellWidth, 0)
-        c.lineTo(i*cellWidth, canvas.height)
-        c.stroke()
+//Test data and functions
+// let graph = [
+//     [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
+//     [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
+//     [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
+//     [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
+//     [false, true, true, true, true, true, true, true, true ,true ,false, false, false, true, true, true, true, true, true, true ,true ,false],
+//     [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
+//     [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
+//     [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
+//     [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
+//     [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
+//     [false, true, true, true, true, true, true, true, true ,true ,true, true, true, true, true, true, true, true, true, true ,true ,false],
+//     [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
+// ]
 
-        c.beginPath()
-        c.moveTo(0, i*cellHeight)
-        c.lineTo(canvas.width, i*cellHeight)
-        c.stroke()
-    }
-}
-
-Grid()
 let startPos = {
-    i: 1,
-    j: 6
+    i: 0,
+    j: 0
 }
 
 let endPoint = {
-    i: 3,
-    j: 19  
+    i: 0,
+    j: 0  
 }
+
+let graph = []
 
 function ViewPath(route){
     for(let i = 1;i<graph.length;i++){
@@ -113,6 +104,40 @@ function ViewPath(route){
         c.fill()
     }
 }
+
+function GenerateGraph(walls){
+   
+    graph.push(Array(xCellCount+2).fill(false))
+   
+    for(let i = 0;i<yCellCount;i++){
+        graph.push(Array(xCellCount+2).fill(false))
+        for(let j = 1;j<=xCellCount;j++){
+            if(NotVisited(i, j-1, walls)){
+                graph[i+1][j] = true
+            }
+        }
+    }
+    graph.push(Array(xCellCount+2).fill(false))
+ 
+}
+
+function Grid(){
+    for(let i = 1;i<xCellCount;i++){
+        c.beginPath();
+        c.moveTo(i*cellWidth, 0)
+        c.lineTo(i*cellWidth, canvas.height)
+        c.stroke()
+
+        c.beginPath()
+        c.moveTo(0, i*cellHeight)
+        c.lineTo(canvas.width, i*cellHeight)
+        c.stroke()
+    }
+}
+
+Grid()
+
+
 
 let isFinished = false
 
@@ -171,7 +196,6 @@ function DrawFrames(){
 
     let reqId
 
-    
     if(!isFinished){
         reqId = window.requestAnimationFrame(DrawFrames)
     }else{
@@ -179,7 +203,7 @@ function DrawFrames(){
     }
 }
 
-window.requestAnimationFrame(DrawFrames)
+// window.requestAnimationFrame(DrawFrames)
 
 //Functionality
 
@@ -200,18 +224,29 @@ function NotDiscovered(nodeI, nodeJ, discovered){
     }
     return -1
 }
-let visited = []
+
+
+let visited = []          
 let discovered = []
 let done = false
 
-discovered.push({i:startPos.i, j:startPos.j, cost:0})
-visited.push({i:startPos.i, j:startPos.j})
-let currentNode = {i: startPos.i, j: startPos.j, cost: 0}
+
+let currentNode = {}
 
 let route = []
-let routeNode = {i: endPoint.i, j: endPoint.j}
+let routeNode = {}
 
-route.push(routeNode)
+
+
+function Init(){
+    discovered.push({i:startPos.i, j:startPos.j, cost:0})
+    visited.push({i:startPos.i, j:startPos.j})
+
+    currentNode = {i: startPos.i, j:startPos.j}
+    routeNode = {i:endPoint.i, j:endPoint.j}
+    route.push(routeNode)
+}
+
 function Dijktstra(){
     //Find cost of every node until end is found
    
@@ -249,6 +284,7 @@ function Dijktstra(){
         visited.push({i: currentNode.i, j:currentNode.j})
     }
     else{
+        console.log(discovered)
         while(routeNode.i != startPos.i || routeNode.j != startPos.j){
             let minCost = undefined
             let minIndex = undefined
@@ -268,8 +304,8 @@ function Dijktstra(){
             }
             route.push({i:discovered[minIndex].i, j:discovered[minIndex].j})
             routeNode = {i:discovered[minIndex].i, j:discovered[minIndex].j}
-           
         }
+        console.log("nigga")
         isFinished = true
     }
   //  ViewPath(route)
@@ -370,14 +406,21 @@ let prevEnd = {
     j: -1
 }
 
+
+
+let walls = []
+
 canvas.addEventListener("click", (e) =>{
     switch(mode){
         case 1:
             mousePos.x = e.x-canvas.offsetLeft+(canvas.width/2)
             mousePos.y = e.y-canvas.offsetTop 
             c.beginPath()
-            c.fillStyle = "red"
-            c.fillRect(mousePos.x - (mousePos.x % cellWidth), mousePos.y - (mousePos.y % cellHeight), cellWidth, cellHeight)
+            c.fillStyle = "black"
+            const xPos = mousePos.x - (mousePos.x % cellWidth) 
+            const yPos = mousePos.y - (mousePos.y % cellHeight)
+            walls.push({i: yPos / cellHeight, j: xPos / cellWidth})
+            c.fillRect(xPos, yPos, cellWidth, cellHeight)
             c.fill()
             break
         case 2:
@@ -390,17 +433,32 @@ canvas.addEventListener("click", (e) =>{
                 let cellY = mousePos.y - (mousePos.y % cellHeight)
                 c.fillRect(cellX, cellY, cellWidth, cellHeight)
                 c.fill()   
+                startPos.i = Math.floor(mousePos.y / cellHeight)+1
+                startPos.j = Math.floor(mousePos.x / cellWidth)+1
                 prevStart.x = cellX
                 prevStart.y = cellY
                 prevStart.i = Math.floor(mousePos.y / cellHeight)
                 prevStart.j = Math.floor(mousePos.x / cellWidth)
-                console.log(prevStart)
-            }else{
-                //Redraw the entire thing
             }
             break
-            
-
-    }
+        case 3:
+            if(prevEnd.x == -1){
+                mousePos.x = e.x-canvas.offsetLeft+(canvas.width/2)
+                mousePos.y = e.y-canvas.offsetTop
+                c.beginPath()
+                c.fillStyle = "blue"
+                let cellX = mousePos.x - (mousePos.x % cellWidth) 
+                let cellY = mousePos.y - (mousePos.y % cellHeight)
+                c.fillRect(cellX, cellY, cellWidth, cellHeight)
+                c.fill()
+                endPoint.i = Math.floor(mousePos.y / cellHeight)+1
+                endPoint.j = Math.floor(mousePos.x / cellWidth)+1
+                prevEnd.x = cellX
+                prevEnd.y = cellY
+                prevEnd.i = Math.floor(mousePos.y / cellHeight)
+                prevEnd.j = Math.floor(mousePos.x / cellWidth)
+            }
+            break
+        }
     
 })

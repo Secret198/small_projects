@@ -242,9 +242,10 @@ function Init(){
     discovered.push({i:startPos.i, j:startPos.j, cost:0})
     visited.push({i:startPos.i, j:startPos.j})
 
-    currentNode = {i: startPos.i, j:startPos.j}
+    currentNode = {i: startPos.i, j:startPos.j, cost:0}
     routeNode = {i:endPoint.i, j:endPoint.j}
     route.push(routeNode)
+    console.log(route)
 }
 
 function Dijktstra(){
@@ -265,6 +266,7 @@ function Dijktstra(){
                     }
                     if(currentNode.i + i == endPoint.i && currentNode.j + j == endPoint.j){
                         done = true
+                       
                     }
                 }
             }
@@ -282,9 +284,9 @@ function Dijktstra(){
         }
         currentNode = min
         visited.push({i: currentNode.i, j:currentNode.j})
+
     }
     else{
-        console.log(discovered)
         while(routeNode.i != startPos.i || routeNode.j != startPos.j){
             let minCost = undefined
             let minIndex = undefined
@@ -305,7 +307,6 @@ function Dijktstra(){
             route.push({i:discovered[minIndex].i, j:discovered[minIndex].j})
             routeNode = {i:discovered[minIndex].i, j:discovered[minIndex].j}
         }
-        console.log("nigga")
         isFinished = true
     }
   //  ViewPath(route)

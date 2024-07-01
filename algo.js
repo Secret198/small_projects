@@ -15,6 +15,7 @@ const startButton = document.getElementById("start")
 const wallDone = document.getElementById("wall")
 const startDone = document.getElementById("startPoint")
 const endDone = document.getElementById("endPoint")
+const utasitas = document.getElementsByClassName("utasitas")[0]
 
 const controls = document.getElementsByClassName("controls")[0]
 
@@ -34,20 +35,25 @@ let mode = 0
 startButton.addEventListener("click", () =>{
     mode = 1
     ShowButton(wallDone) 
+    utasitas.innerText = "Jelölje be a falakat majd kattintson a kész gombra!"
 })
 
 wallDone.addEventListener("click", () =>{
     mode = 2
     ShowButton(startDone)
     GenerateGraph(walls)
+    utasitas.innerText = "Jelölje be a start pozíciót, és kattintson a kész gombra!"
 })
 startDone.addEventListener("click", () =>{
     mode = 3
     ShowButton(endDone)    
+    utasitas.innerText = "Jelölje be a vég pozíciót, és kattintson a kész gombra!"
 })
 
 endDone.addEventListener("click", () =>{
     Init()
+    utasitas.innerText = "Útvonal keresése!"
+    endDone.style.display = "none"
     window.requestAnimationFrame(DrawFrames)   
 })
 
@@ -256,12 +262,12 @@ function Dijktstra(){
             for(let j = -1;j<=1;j++){
                 if(i != 0 || j != 0){
                     if(graph[currentNode.i + i][currentNode.j + j] && NotVisited(currentNode.i + i, currentNode.j + j, visited)&& NotDiscovered(currentNode.i + i, currentNode.j + j, discovered) == -1){
-                        discovered.push({i: currentNode.i+i, j: currentNode.j+j, cost: currentNode.cost+1})
+                        discovered.push({i: currentNode.i+i, j: currentNode.j+j, cost: currentNode.cost+ Math.sqrt(Math.abs(i) + Math.abs(j))})
                     }else if(graph[currentNode.i + i][currentNode.j + j] && NotVisited(currentNode.i + i, currentNode.j + j, visited)){
                         let child = NotDiscovered(currentNode.i + i, currentNode.j + j, discovered) 
                     
-                        if(discovered[child].cost < currentNode.cost + 1){
-                            discovered[child].cost = currentNode.cost + 1
+                        if(discovered[child].cost < currentNode.cost + Math.sqrt(Math.abs(i) + Math.abs(j))){
+                            discovered[child].cost = currentNode.cost + Math.sqrt(Math.abs(i) + Math.abs(j))
                         }
                     }
                     if(currentNode.i + i == endPoint.i && currentNode.j + j == endPoint.j){
@@ -287,6 +293,7 @@ function Dijktstra(){
 
     }
     else{
+        console.log(discovered)
         while(routeNode.i != startPos.i || routeNode.j != startPos.j){
             let minCost = undefined
             let minIndex = undefined

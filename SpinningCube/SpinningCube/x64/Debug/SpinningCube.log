@@ -1,0 +1,5 @@
+﻿  SpinningCube.cpp
+D:\projects\SpinningCube\SpinningCube.cpp(79,20): warning C4305: '+=': truncation from 'double' to 'float'
+D:\projects\SpinningCube\SpinningCube.cpp(80,20): warning C4305: '+=': truncation from 'double' to 'float'
+D:\projects\SpinningCube\SpinningCube.cpp(81,20): warning C4305: '+=': truncation from 'double' to 'float'
+  SpinningCube.vcxproj -> D:\projects\SpinningCube\x64\Debug\SpinningCube.exe

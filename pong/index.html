@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong</title>
+
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        canvas{
+            background-color: black;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @font-face {
+            font-family: arcade;
+            src: url(joystix\ monospace.ttf);
+        }
+        #gameOver{
+            width: 400px;
+            height: 300px;
+            background-color: rgb(88, 88, 88);
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+        #gOtext{
+            font-family: arcade;
+            font-size: 30px;
+        }
+
+        #restart, #single, #double{
+            width: 80%;
+            height: 20%;
+            font-size: 20px;
+            font-family: arcade;
+            border: none;
+            background-color: rgb(70, 136, 202);
+            color: white;
+        }
+
+        #restart:hover{
+            background-color: rgb(144, 144, 250);
+        }
+        #gameMode{
+            width: 400px;
+            height: 300px;
+            background-color: rgb(88, 88, 88);
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+        }
+        #single, #double{
+            background-color: rgb(51, 205, 107);
+        }
+        #single:hover, #double:hover{
+            background-color: rgb(111, 201, 144);
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+    <div id="gameOver">
+        <p id="gOtext">You won</p>
+        <button id="restart">Restart</button>
+    </div>
+    <div id="gameMode">
+        <button id="single">1 player</button>
+        <button id="double">2 player</button>
+    </div>
+    
+
+    <script src="game.js"></script>
+</body>
+</html>

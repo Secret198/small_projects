@@ -19,6 +19,12 @@ const utasitas = document.getElementsByClassName("utasitas")[0]
 
 const controls = document.getElementsByClassName("controls")[0]
 
+const controlModes = {
+    wall: 1,
+    start: 2,
+    end: 3
+}
+
 function ShowButton(button){
     startButton.style.display = "none"
     wallDone.style.display = "none"
@@ -33,26 +39,26 @@ ShowButton(startButton)
 let mode = 0
 
 startButton.addEventListener("click", () =>{
-    mode = 1
+    mode = controlModes.wall
     ShowButton(wallDone) 
-    utasitas.innerText = "Jelölje be a falakat majd kattintson a kész gombra!"
+    utasitas.innerText = "Select the squares where you would like to place walls, and press done!"
 })
 
 wallDone.addEventListener("click", () =>{
-    mode = 2
+    mode = controlModes.start
     ShowButton(startDone)
     GenerateGraph(walls)
-    utasitas.innerText = "Jelölje be a start pozíciót, és kattintson a kész gombra!"
+    utasitas.innerText = "Select the square for the start position, and press done!"
 })
 startDone.addEventListener("click", () =>{
-    mode = 3
+    mode = controlModes.end
     ShowButton(endDone)    
-    utasitas.innerText = "Jelölje be a vég pozíciót, és kattintson a kész gombra!"
+    utasitas.innerText = "Select the square for the end position, and press done!"
 })
 
 endDone.addEventListener("click", () =>{
     Init()
-    utasitas.innerText = "Útvonal keresése!"
+    utasitas.innerText = "Searching for path!"
     endDone.style.display = "none"
     window.requestAnimationFrame(DrawFrames)   
 })
@@ -420,7 +426,7 @@ let walls = []
 
 canvas.addEventListener("click", (e) =>{
     switch(mode){
-        case 1:
+        case controlModes.wall:
             mousePos.x = e.x-canvas.offsetLeft+(canvas.width/2)
             mousePos.y = e.y-canvas.offsetTop 
             c.beginPath()
@@ -431,7 +437,7 @@ canvas.addEventListener("click", (e) =>{
             c.fillRect(xPos, yPos, cellWidth, cellHeight)
             c.fill()
             break
-        case 2:
+        case controlModes.start:
             if(prevStart.x == -1){
                 mousePos.x = e.x-canvas.offsetLeft+(canvas.width/2)
                 mousePos.y = e.y-canvas.offsetTop
@@ -449,7 +455,7 @@ canvas.addEventListener("click", (e) =>{
                 prevStart.j = Math.floor(mousePos.x / cellWidth)
             }
             break
-        case 3:
+        case controlModes.end:
             if(prevEnd.x == -1){
                 mousePos.x = e.x-canvas.offsetLeft+(canvas.width/2)
                 mousePos.y = e.y-canvas.offsetTop

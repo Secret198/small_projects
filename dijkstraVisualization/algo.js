@@ -10,7 +10,7 @@ const yCellCount = 10
 const cellWidth = canvas.width / xCellCount
 const cellHeight = canvas.height / yCellCount
 
-
+const restartButton = document.getElementById("restart")
 const startButton = document.getElementById("start")
 const wallDone = document.getElementById("wall")
 const startDone = document.getElementById("startPoint")
@@ -30,7 +30,7 @@ function ShowButton(button){
     wallDone.style.display = "none"
     startDone.style.display = "none"
     endDone.style.display = "none"
-
+    restartButton.style.display = "none"
     button.style.display = "block"
 }
 
@@ -63,28 +63,10 @@ endDone.addEventListener("click", () =>{
     window.requestAnimationFrame(DrawFrames)   
 })
 
-// let graph = Array(yCellCount)
+function restart(){
+    window.location.reload()
+}
 
-// for(let i = 0;i<yCellCount;i++){
-//     graph[i] = Array(xCellCount)
-// }
-
-
-//Test data and functions
-// let graph = [
-//     [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false],
-//     [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
-//     [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
-//     [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
-//     [false, true, true, true, true, true, true, true, true ,true ,false, false, false, true, true, true, true, true, true, true ,true ,false],
-//     [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
-//     [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
-//     [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
-//     [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
-//     [false, true, true, true, true, true, true, true, true ,true ,true, true, false, true, true, true, true, true, true, true ,true ,false],
-//     [false, true, true, true, true, true, true, true, true ,true ,true, true, true, true, true, true, true, true, true, true ,true ,false],
-//     [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false]
-// ]
 
 let startPos = {
     i: 0,
@@ -155,7 +137,7 @@ let isFinished = false
 
 function DrawFrames(){
     
-    Dijktstra()
+    Dijkstra()
     c.clearRect(0, 0, canvas.width, canvas.height)
     Grid()
     //Draw walls
@@ -209,6 +191,7 @@ function DrawFrames(){
     let reqId
 
     if(!isFinished){
+        ShowButton(restartButton)
         reqId = window.requestAnimationFrame(DrawFrames)
     }else{
         window.cancelAnimationFrame(reqId)
@@ -257,29 +240,38 @@ function Init(){
     currentNode = {i: startPos.i, j:startPos.j, cost:0}
     routeNode = {i:endPoint.i, j:endPoint.j}
     route.push(routeNode)
-    console.log(route)
+    // console.log(route)
+
 }
 
-function Dijktstra(){
+
+function Dijkstra(){
     //Find cost of every node until end is found
    
     if(!done){
         for(let i = -1;i<=1;i++){
             for(let j = -1;j<=1;j++){
                 if(i != 0 || j != 0){
-                    if(graph[currentNode.i + i][currentNode.j + j] && NotVisited(currentNode.i + i, currentNode.j + j, visited)&& NotDiscovered(currentNode.i + i, currentNode.j + j, discovered) == -1){
-                        discovered.push({i: currentNode.i+i, j: currentNode.j+j, cost: currentNode.cost+ Math.sqrt(Math.abs(i) + Math.abs(j))})
-                    }else if(graph[currentNode.i + i][currentNode.j + j] && NotVisited(currentNode.i + i, currentNode.j + j, visited)){
-                        let child = NotDiscovered(currentNode.i + i, currentNode.j + j, discovered) 
-                    
-                        if(discovered[child].cost < currentNode.cost + Math.sqrt(Math.abs(i) + Math.abs(j))){
-                            discovered[child].cost = currentNode.cost + Math.sqrt(Math.abs(i) + Math.abs(j))
+                    try{
+                        if(graph[currentNode.i + i][currentNode.j + j] && NotVisited(currentNode.i + i, currentNode.j + j, visited)&& NotDiscovered(currentNode.i + i, currentNode.j + j, discovered) == -1){
+                            discovered.push({i: currentNode.i+i, j: currentNode.j+j, cost: Math.floor(currentNode.cost + (Math.sqrt(Math.abs(i) + Math.abs(j)) * 10))})
+                        }else if(graph[currentNode.i + i][currentNode.j + j] && NotVisited(currentNode.i + i, currentNode.j + j, visited)){
+                            let child = NotDiscovered(currentNode.i + i, currentNode.j + j, discovered) 
+                        
+                            if(discovered[child].cost < currentNode.cost + Math.sqrt(Math.abs(i) + Math.abs(j))){
+                                discovered[child].cost = currentNode.cost + Math.sqrt(Math.abs(i) + Math.abs(j))
+                            }
+                        }
+                        if(currentNode.i + i == endPoint.i && currentNode.j + j == endPoint.j){
+                            done = true
+                        
+                        }
+                    }catch(err){
+                        if(!alert('There is no accessible path!')){
+                            window.location.reload()
                         }
                     }
-                    if(currentNode.i + i == endPoint.i && currentNode.j + j == endPoint.j){
-                        done = true
-                       
-                    }
+
                 }
             }
         }
@@ -299,7 +291,6 @@ function Dijktstra(){
 
     }
     else{
-        console.log(discovered)
         while(routeNode.i != startPos.i || routeNode.j != startPos.j){
             let minCost = undefined
             let minIndex = undefined
@@ -325,81 +316,6 @@ function Dijktstra(){
   //  ViewPath(route)
 }
  
-// function Dijktstra(start, end){ //Szétszedni hogy lehessen animálni
-//     let visited = []
-//     let discovered = []
-//     let done = false
-
-//     discovered.push({i:start.i, j:start.j, cost:0})
-//     visited.push({i:start.i, j:start.j})
-//     let currentNode = {i: start.i, j: start.j, cost: 0}
-
-//     //Find cost of every node until end is found
-//     while(visited.length < (graph.length * graph[0].length) && !done){
-//         for(let i = -1;i<=1;i++){
-//             for(let j = -1;j<=1;j++){
-//                 if(i != 0 || j != 0){
-//                     if(graph[currentNode.i + i][currentNode.j + j] && NotVisited(currentNode.i + i, currentNode.j + j, visited)&& NotDiscovered(currentNode.i + i, currentNode.j + j, discovered) == -1){
-//                         discovered.push({i: currentNode.i+i, j: currentNode.j+j, cost: currentNode.cost+1})
-//                     }else if(graph[currentNode.i + i][currentNode.j + j] && NotVisited(currentNode.i + i, currentNode.j + j, visited)){
-//                         let child = NotDiscovered(currentNode.i + i, currentNode.j + j, discovered) 
-                    
-//                         if(discovered[child].cost < currentNode.cost + 1){
-//                             discovered[child].cost = currentNode.cost + 1
-//                         }
-//                     }
-//                     if(currentNode.i + i == end.i && currentNode.j + j == end.j){
-//                         done = true
-//                     }
-//                 }
-//             }
-//         }
-//         let min = {
-//             i: undefined,
-//             j: undefined,
-//             cost: undefined
-//         }
-      
-//         for(let i = 0;i<discovered.length;i++){
-//             if((min.i == undefined || discovered[i].cost < min.cost) && NotVisited(discovered[i].i, discovered[i].j, visited)){
-//                 min = discovered[i]
-//             }
-//         }
-//         currentNode = min
-//         visited.push({i: currentNode.i, j:currentNode.j})
-//         window.requestAnimationFrame(DrawFrames)
-//     }
-   
-//     //Find the path with lowest cost
-//     let route = []
-//     let routeNode = {i: end.i, j: end.j}
-
-//     route.push(routeNode)
-
-//     while(routeNode.i != start.i || routeNode.j != start.j){
-//         let minCost = undefined
-//         let minIndex = undefined
-//         for(let i = -1;i<=1;i++){
-//             for(let j = -1;j<=1;j++){
-//                 if(i != 0 || j != 0){
-//                     let discoveredIndex = NotDiscovered(routeNode.i + i, routeNode.j + j, discovered)
-//                     if(discoveredIndex != -1){
-//                         if(minCost == undefined || discovered[discoveredIndex].cost < minCost){
-//                             minCost = discovered[discoveredIndex].cost
-//                             minIndex = discoveredIndex
-//                         }
-//                     }
-//                 }
-            
-//             }
-//         }
-//         route.push({i:discovered[minIndex].i, j:discovered[minIndex].j})
-//         routeNode = {i:discovered[minIndex].i, j:discovered[minIndex].j}
-//     }
-
-    
-//   //  ViewPath(route)
-// }
 
 
 let mousePos = {

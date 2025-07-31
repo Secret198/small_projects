@@ -254,13 +254,16 @@ function Dijkstra(){
                 if(i != 0 || j != 0){
                     try{
                         if(graph[currentNode.i + i][currentNode.j + j] && NotVisited(currentNode.i + i, currentNode.j + j, visited)&& NotDiscovered(currentNode.i + i, currentNode.j + j, discovered) == -1){
-                            discovered.push({i: currentNode.i+i, j: currentNode.j+j, cost: Math.floor(currentNode.cost + (Math.sqrt(Math.abs(i) + Math.abs(j)) * 10))})
+                            discovered.push({i: currentNode.i+i, j: currentNode.j+j, cost: currentNode.cost + Math.floor(Math.sqrt(Math.abs(i) + Math.abs(j)) * 10)})
                         }else if(graph[currentNode.i + i][currentNode.j + j] && NotVisited(currentNode.i + i, currentNode.j + j, visited)){
                             let child = NotDiscovered(currentNode.i + i, currentNode.j + j, discovered) 
                         
                             if(discovered[child].cost < currentNode.cost + Math.sqrt(Math.abs(i) + Math.abs(j))){
                                 discovered[child].cost = currentNode.cost + Math.sqrt(Math.abs(i) + Math.abs(j))
                             }
+                            // if(discovered[child].cost < currentNode.cost + Math.floor(Math.sqrt(Math.abs(i) + Math.abs(j)) * 10)){
+                            //     discovered[child].cost = currentNode.cost + Math.floor(Math.sqrt(Math.abs(i) + Math.abs(j)) * 10)
+                            // }
                         }
                         if(currentNode.i + i == endPoint.i && currentNode.j + j == endPoint.j){
                             done = true

@@ -1,0 +1,11 @@
+﻿  main.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.26100.0\shared\minwindef.h(130,9): warning C4005: 'APIENTRY': macro redefinition
+  (compiling source file 'main.cpp')
+      E:\projects\small_projects\dijkstraVisualization\c++\graphs\inlcudes\glad\glad.h(32,9):
+      see previous definition of 'APIENTRY'
+  
+E:\projects\small_projects\dijkstraVisualization\c++\graphs\Graphs\main.cpp(226,20): warning C4244: 'initializing': conversion from 'ULONGLONG' to 'float', possible loss of data
+E:\projects\small_projects\dijkstraVisualization\c++\graphs\Graphs\main.cpp(294,18): warning C4244: 'initializing': conversion from 'ULONGLONG' to 'float', possible loss of data
+E:\projects\small_projects\dijkstraVisualization\c++\graphs\Graphs\main.cpp(361,45): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+glfw3.lib(win32_joystick.obj) : warning LNK4099: PDB 'glfw3.pdb' was not found with 'glfw3.lib(win32_joystick.obj)' or at 'E:\projects\small_projects\dijkstraVisualization\c++\graphs\Graphs\x64\Debug\glfw3.pdb'; linking object as if no debug info
+  Graphs.vcxproj -> E:\projects\small_projects\dijkstraVisualization\c++\graphs\Graphs\x64\Debug\Graphs.exe
